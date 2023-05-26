@@ -1,0 +1,10 @@
+.files_upload_wrapper{
+text-align: center;
+border: 1px solid #e8e8e8;
+}
+
+.files_upload_wrapper > form > div {
+margin: 1rem 0;
+ }
+
+

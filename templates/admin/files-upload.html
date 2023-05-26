@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+
+{% load static %}
+{% load i18n %}
+{% block pageextrastyle %}
+<link href="{% static 'css/files_upload.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+        {% if title %} &rsaquo; {{ title }}{% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
+
+{% block content %}
+<div class="files_upload_wrapper">
+        <form method="POST" action="" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <div><input type="file" name="file" required accept=".csv"></div>
+            <div><input type="submit" value="Отправить"></div>
+        </form>
+</div>
+{% endblock %}
+
+{% block pageextrascript %}
+<script src="{% static 'js/files_upload.js' %}"></script>
+{% endblock %}
