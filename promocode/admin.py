@@ -39,7 +39,8 @@ class CustomAdminPageAdmin(admin.ModelAdmin):
             end = time.time() - start
             if is_ok:
                 messages.add_message(request, messages.SUCCESS, 'Данные из файла успешно загружены в БД')
-                messages.add_message(request, messages.SUCCESS, f"Время обработки: {end/60} минут")
+                messages.add_message(request, messages.SUCCESS,
+                                     f"Время обработки: {time.strftime('%H:%M:%S', time.gmtime(end))}")
 
 
             return redirect("admin:files_upload")
