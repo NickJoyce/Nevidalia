@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'promocode'
+    'promocode',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -140,7 +141,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
 
-CSRF_TRUSTED_ORIGINS = ['http://*.45.12.73.230/']
+CSRF_TRUSTED_ORIGINS = ['https://*.park-nevidaliya.ru/']
 
 # media
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -158,3 +159,6 @@ CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
 CELERY_ACCEPT_CONTENT = ["application/json",]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+
+#webhook
+WEBHOOK_API_KEY=os.getenv('WEBHOOK_API_KEY')

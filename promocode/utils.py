@@ -7,6 +7,36 @@ from django.contrib import messages
 from project.settings.base import BASE_DIR
 
 
+class Customer():
+    def __init__(self, name: str, email: str, phone: str):
+        self.name = name
+        self.email = email
+        self.phone = phone
+
+
+class OrderItem():
+    def __init__(self, name: str, quantity: int, amount: int, price: int):
+        self.name = name
+        self.quantity = quantity
+        self.amount = amount
+        self.price = price
+
+
+class Order():
+    def __init__(self, customer: Customer, park: str, order_id: str, items: [OrderItem]):
+        self.customer = customer
+        self.order_id = order_id
+        self.items = items
+        self.park = park
+
+
+
+
+
+
+
+
+
 def get_data_from_str(data_as_str) -> date:
     """data format: 23.05.2023"""
     return date(*reversed([int(i) for i in data_as_str.split('.')]))

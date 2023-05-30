@@ -24,3 +24,18 @@ class Promocode(models.Model):
 
     def __str__(self):
         return f"{self.code}"
+
+# class ProductActionIdentWords(models.Model):
+#     name = models.CharField(max_length=255, verbose_name="Идентифицирующее слово для связи Имени услуги в заказе и Наименования Акции")
+#
+#     class Meta:
+#         verbose_name = "Идентифицирующее слово для связи Имени услуги в заказе и Наименования Акции"
+#         verbose_name_plural = "Идентифицирующее слова для связи Имени услуги в заказе и Наименования Акции"
+
+
+# class Park(models.Model):
+#     name = models.CharField(max_length=255, verbose_name="Парк")
+#
+#     class Meta:
+#         verbose_name = "Парк"
+#         verbose_name_plural = "Парки"

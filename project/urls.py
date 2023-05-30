@@ -19,8 +19,17 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from django.views.generic.base import RedirectView
+from promocode import views as promocode_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/admin')),
-]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# webhooks
+urlpatterns += [
+    path('webhook/order/nmtfkEQ8uzDJbJ7q4Jgt06wPvMvJXH', promocode_views.order_webhook, name='order_webhook'),
+]
+
+# media
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
