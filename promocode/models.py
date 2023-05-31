@@ -34,12 +34,20 @@ class TicketType(models.Model):
         verbose_name = "Тип билета"
         verbose_name_plural = "Типы билета"
 
+    def __str__(self):
+        return f"{self.type}"
+
+
 class TicketLimit(models.Model):
     name = models.CharField(max_length=255, verbose_name="Лимит", unique=True)
 
     class Meta:
         verbose_name = "Лимит"
         verbose_name_plural = "Лимиты"
+
+    def __str__(self):
+        return f"{self.name}"
+
 
 class TicketDayType(models.Model):
     name = models.CharField(max_length=255, verbose_name="Тип дней недели", unique=True)
@@ -48,12 +56,19 @@ class TicketDayType(models.Model):
         verbose_name = "Тип дней недели"
         verbose_name_plural = "Типы дней недели"
 
+    def __str__(self):
+        return f"{self.name}"
+
+
 class TicketPark(models.Model):
     name = models.CharField(max_length=255, verbose_name="Парк", unique=True)
 
     class Meta:
         verbose_name = "Парк"
         verbose_name_plural = "Парки"
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class Ticket(models.Model):
@@ -77,6 +92,6 @@ class Ticket(models.Model):
         verbose_name = "Билет"
         verbose_name_plural = "Билеты"
 
-
-
+    def __str__(self):
+        return f"{self.name}"
 
