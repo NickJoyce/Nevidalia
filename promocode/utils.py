@@ -23,9 +23,10 @@ class OrderItem():
 
 
 class Order():
-    def __init__(self, customer: Customer, park: str, order_id: str, items: [OrderItem]):
+    def __init__(self, customer: Customer, park: str, order_id: str, items: [OrderItem], amount):
         self.customer = customer
-        self.order_id = order_id
+        self.id = order_id
+        self.amount = amount
         self.items = items
         self.park = park
 

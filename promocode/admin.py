@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import redirect
-from .models import CustomAdminPage, Promocode
+from .models import CustomAdminPage, Promocode, TicketType, TicketLimit, TicketDayType, TicketPark, Ticket
 from django.urls import path
 from django.template.response import TemplateResponse
 from django.contrib import admin
@@ -65,3 +65,26 @@ class PromocodeAdmin(admin.ModelAdmin):
                     'date_of_use']
 
 
+@admin.register(Ticket)
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ['name', 'tilda_external_product_id', 'park', 'type', 'limit', 'day_type']
+    list_filter = ['park', 'type', 'limit', 'day_type']
+
+@admin.register(TicketType)
+class TicketTypeAdmin(admin.ModelAdmin):
+    list_display = ['type']
+
+
+@admin.register(TicketLimit)
+class TicketLimitAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+
+@admin.register(TicketDayType)
+class TicketDayTypeAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+
+@admin.register(TicketPark)
+class TicketParkAdmin(admin.ModelAdmin):
+    list_display = ['name']

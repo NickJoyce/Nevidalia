@@ -32,12 +32,18 @@ def order_webhook(request):
 
 @atomic
 def order_webhook_payload_handling(payload):
-    order = Order(customer=Customer(name = payload['name'],
+    order = Order(customer=Customer(name=payload['name'],
                                     email=payload['email'],
-                                    phone=payload['phone'] ),
+                                    phone=payload['phone']),
                   order_id=payload['payment']['orderid'],
+                  amount=payload['amount'],
                   park=payload['park'],
                   items=[OrderItem(**item) for item in payload['payment']['products']])
+
+    print()
+
+
+
 
 
     Parks = ["волгоград", "сергиев посад", "сургут", "тюмень", "улан-удэ"]
