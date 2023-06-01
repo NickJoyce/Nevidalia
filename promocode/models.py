@@ -15,9 +15,15 @@ class Promocode(models.Model):
     park = models.CharField(max_length=255, verbose_name="Парк")
     creator = models.CharField(max_length=255, verbose_name="Создатель")
     action_name = models.CharField(max_length=255, verbose_name="Название акции")
+    tilda_external_product_id = models.CharField(max_length=255, verbose_name="Внешний код товара (Тильда)")
     code = models.CharField(max_length=255, verbose_name="Код", unique=True)
     status = models.BooleanField(verbose_name="Статус", default=False)
     date_of_use = models.DateField(verbose_name="Дата использования", null=True, blank=True, default=None)
+    ticket_limit = models.CharField(max_length=255, verbose_name="Лимит", null=True, blank=True,
+                             default="часовой")
+    ticket_day_type = models.CharField(max_length=255, verbose_name="Тип дня недели", null=True, blank=True,
+                                       default="будни")
+
 
     class Meta:
         verbose_name = "Промокод"
@@ -27,71 +33,7 @@ class Promocode(models.Model):
         return f"{self.code}"
 
 
-class TicketType(models.Model):
-    type = models.CharField(max_length=255, verbose_name="Тип билета", unique=True)
-
-    class Meta:
-        verbose_name = "Тип билета"
-        verbose_name_plural = "Типы билета"
-
-    def __str__(self):
-        return f"{self.type}"
 
 
-class TicketLimit(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Лимит", unique=True)
 
-    class Meta:
-        verbose_name = "Лимит"
-        verbose_name_plural = "Лимиты"
-
-    def __str__(self):
-        return f"{self.name}"
-
-
-class TicketDayType(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Тип дней недели", unique=True)
-
-    class Meta:
-        verbose_name = "Тип дней недели"
-        verbose_name_plural = "Типы дней недели"
-
-    def __str__(self):
-        return f"{self.name}"
-
-
-class TicketPark(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Парк", unique=True)
-
-    class Meta:
-        verbose_name = "Парк"
-        verbose_name_plural = "Парки"
-
-    def __str__(self):
-        return f"{self.name}"
-
-
-class Ticket(models.Model):
-    name = models.CharField(max_length=255, verbose_name="Произвольное наименование", null=True, blank=True,)
-    tilda_external_product_id = models.CharField(max_length=255, verbose_name="Внешний код товара (Тильда)",
-                                                 unique=True)
-    park = models.ForeignKey(TicketPark, verbose_name="Парк", null=True, blank=True,
-                             on_delete=models.SET_NULL,
-                             related_name='ticket_park')
-    type = models.ForeignKey(TicketType, verbose_name="Тип билета",  null=True, blank=True,
-                             on_delete=models.SET_NULL,
-                             related_name='ticket_type')
-    limit = models.ForeignKey(TicketLimit, verbose_name="Лимит",  null=True, blank=True,
-                              on_delete=models.SET_NULL,
-                              related_name='ticket_limit')
-    day_type = models.ForeignKey(TicketDayType, verbose_name="Тип дней недели",  null=True, blank=True,
-                                 on_delete=models.SET_NULL,
-                                 related_name='ticket_day_type')
-
-    class Meta:
-        verbose_name = "Билет"
-        verbose_name_plural = "Билеты"
-
-    def __str__(self):
-        return f"{self.name}"
 

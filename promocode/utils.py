@@ -15,17 +15,26 @@ class Customer():
 
 
 class OrderItem():
-    def __init__(self, name: str, quantity: int, amount: int, price: int):
+    def __init__(self, name: str, quantity: int, amount: int, price: int, externalid: str):
         self.name = name
         self.quantity = quantity
         self.amount = amount
         self.price = price
+        self.externalid = externalid
+        self.promocodes = []
+
+    def get_promocodes_as_str(self):
+        if self.promocodes:
+            return ", ".join([promocode.code for promocode in self.promocodes])
+
+
+
 
 
 class Order():
-    def __init__(self, customer: Customer, park: str, order_id: str, items: [OrderItem], amount):
+    def __init__(self, customer: Customer, park: str, order_id: str, items: [OrderItem], amount:int):
         self.customer = customer
-        self.id = order_id
+        self.order_id = order_id
         self.amount = amount
         self.items = items
         self.park = park
@@ -67,7 +76,8 @@ def csv_file_handling(file, request):
                                       creator=row.Создатель,
                                       action_name=row.Название_акции,
                                       code=row.Код,
-                                      status=change_status_to_bool(row.Статус))
+                                      status=change_status_to_bool(row.Статус),
+                                      tilda_external_product_id=row.Внешний_код)
         except:
             delete_last_rows(n-1)
             messages.add_message(request, messages.ERROR, 'Данные из файла не загружены в БД')
