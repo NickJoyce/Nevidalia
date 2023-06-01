@@ -3,7 +3,8 @@ from promocode.models import NotificationRecipients
 
 
 class AdminNotification(Notification):
-    RECIPIENTS = [(recipient.name, recipient.email) for recipient in NotificationRecipients.objects.all()]
+    # RECIPIENTS = [(recipient.name, recipient.email) for recipient in NotificationRecipients.objects.all()]
+    RECIPIENTS = ()
     APP_ERROR = "[APP ERROR]"
     WARNING = "[WARNING]"
 
