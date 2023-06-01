@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import redirect
-from .models import CustomAdminPage, Promocode
+from .models import CustomAdminPage, Promocode, NotificationRecipients
 from django.urls import path
 from django.template.response import TemplateResponse
 from django.contrib import admin
@@ -55,7 +55,6 @@ class CustomAdminPageAdmin(admin.ModelAdmin):
             return TemplateResponse(request, "admin/files-upload.html", context)
 
 
-
 @admin.register(Promocode)
 class PromocodeAdmin(admin.ModelAdmin):
     list_display = ['action_name', 'date_of_create', 'start_date', 'end_date', 'park', 'creator',
@@ -64,3 +63,7 @@ class PromocodeAdmin(admin.ModelAdmin):
     search_fields = ['date_of_create', 'start_date', 'end_date', 'park', 'creator', 'action_name', 'code', 'status',
                     'date_of_use']
 
+
+@admin.register(NotificationRecipients)
+class NotificationRecipientsAdmin(admin.ModelAdmin):
+    list_display = ['name', 'email']

@@ -22,8 +22,7 @@ class Promocode(models.Model):
     ticket_limit = models.CharField(max_length=255, verbose_name="Лимит", null=True, blank=True,
                              default="часовой")
     ticket_day_type = models.CharField(max_length=255, verbose_name="Тип дня недели", null=True, blank=True,
-                                       default="будни")
-
+                                       default="будние")
 
     class Meta:
         verbose_name = "Промокод"
@@ -33,7 +32,17 @@ class Promocode(models.Model):
         return f"{self.code}"
 
 
+class NotificationRecipients(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Имя")
+    email = models.EmailField(null=True, blank=True, verbose_name="Email")
+    is_active = models.BooleanField(default=True)
 
+    class Meta:
+        verbose_name = "Получатель уведомлений"
+        verbose_name_plural = "Получатели уведомлений"
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 

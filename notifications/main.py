@@ -13,7 +13,7 @@ class Notification():
         self.port = int(os.getenv('EMAIL_PORT'))
         self.user = os.getenv('EMAIL_HOST_USER')
         self.password = os.getenv('EMAIL_HOST_PASSWORD')
-        self.from_name = "Никита Смирнов"
+        self.from_name = "park-nevidaliya.ru"
         self.from_email = self.user
 
 

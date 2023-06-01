@@ -12,6 +12,8 @@ from .models import Promocode
 from jinja2 import Template
 from project.settings.base import BASE_DIR
 from notifications.customer import CustomerNotification
+from notifications.admin import AdminNotification
+import traceback
 
 # Create your views here.
 # celery
@@ -26,8 +28,10 @@ def celery_task_inside(request):
 def order_webhook(request):
     given_token = request.headers.get("webhook-api-key", "")
     if compare_digest(given_token, WEBHOOK_API_KEY):
-        payload = json.loads(request.body)
-        order_webhook_payload_handling(payload)
+        try:
+            order_webhook_payload_handling(json.loads(request.body))
+        except:
+            AdminNotification().order_webhook_payload_handling_error(traceback.format_exc())
         return HttpResponse(status=200, reason="OK")
     else:
         return HttpResponse(status=403, reason="API key isn't valid")
@@ -69,35 +73,13 @@ def order_webhook_payload_handling(payload):
             content = Template(f.read()).render(order=order)
 
         recipient = (order.customer.name, order.customer.email)
-        CustomerNotification().promocodes(recipient=recipient, subject=subject, content=content)
-
-
-
-
-        print("Отправляем уведомление")
+        CustomerNotification().send_promocodes(recipient=recipient, subject=subject, content=content)
     else:
+        AdminNotification().send_promocodes_error(order_id=order.order_id)
         print("Уведомление покупателю не отправлено: Доступных для отправки промокодов нет или их недостаточно для всех заказанных товаров")
 
 
 
-
-
-
-    # if products_with_promocodes:
-    #     # меняем статусы у отправлемых промокодов
-    #     for tilda_external_product_id, promocodes in products_with_promocodes.values():
-    #         for promocode in promocodes:
-    #             promocode.status = True
-    #             promocode.save()
-
-    #     with open(f"{BASE_DIR}/notifications/templates/promocodes_content.txt", encoding="utf-8") as f:
-    #         xml_file = f.read()
-    #         rendered_template = Template(xml_file).render(
-    #             order=order
-    #         )
-    #         # print(rendered_template)
-    # else:
-    #     pass
 
 
 
