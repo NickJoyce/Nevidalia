@@ -74,12 +74,11 @@ class SingletonModel(models.Model):
 
 
 class Settings(SingletonModel):
-    is_active_promocode_notification = models.CharField(max_length=255,
-                                                        default=False,
-                                                        verbose_name="Email уведомление покупателю после оплаты заказа",
-                                                        help_text="В выключенном состоянии уведомления отправляются "
-                                                                  "только если email адрес указанный при оформлении"
-                                                                  " из списка раздела Получатели Уведомлений")
+    is_active_promocode_notification = models.BooleanField(default=False,
+                                                           verbose_name="Email уведомление покупателю после оплаты заказа",
+                                                           help_text="В выключенном состоянии уведомления отправляются "
+                                                                     "только если email адрес указанный при оформлении"
+                                                                     " есть в списке раздела Получатели Уведомлений")
 
     class Meta:
         verbose_name = "Настройки"
