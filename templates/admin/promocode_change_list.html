@@ -1,12 +1,19 @@
 {% extends 'admin/change_list.html' %}
 
 {% block object-tools %}
-    <div>
+    <div class="view_list_object_tool_change_external_id">
         <form action="change_external_id/" method="POST">
             {% csrf_token %}
                 <input type="text" name="old_external_id" required placeholder="Внешний код (old)"/>
                 <input type="text" name="new_external_id" required placeholder="Внешний код (new)"/>
                 <input type="submit" value="Заменить внешний код"/>
+        </form>
+    </div><hr>
+    <div class="view_list_object_tool_file_upload">
+        <form method="POST" action="file_upload/" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <input type="file" name="file" required accept=".csv">
+            <input type="submit" value="Отправить">
         </form>
     </div>
     <br />

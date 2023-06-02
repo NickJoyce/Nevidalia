@@ -9,6 +9,7 @@ from .utils import csv_file_handling
 from django.contrib import messages
 import traceback
 import time
+from django.http import HttpResponseRedirect
 
 
 admin.site.site_title = "Admin Panel"
@@ -17,45 +18,8 @@ admin.site.site_header = "Admin Panel"
 admin.site.unregister(User)
 admin.site.unregister(Group)
 
+admin.site.register(Settings)
 
-@admin.register(CustomAdminPage)
-class CustomAdminPageAdmin(admin.ModelAdmin):
-
-    def get_urls(self):
-        urls = super().get_urls()
-        my_urls = [
-            path('files-upload/', self.admin_site.admin_view(self.files_upload), name="files_upload"),
-        ]
-        return my_urls + urls
-
-
-    def files_upload(self, request):
-        if request.method == "POST":
-            file = request.FILES['file']
-
-            start = time.time()
-            is_ok = csv_file_handling(file, request)
-            print(is_ok)
-            end = time.time() - start
-            if is_ok:
-                messages.add_message(request, messages.SUCCESS, 'Данные из файла успешно загружены в БД')
-                messages.add_message(request, messages.SUCCESS,
-                                     f"Время обработки: {time.strftime('%H:%M:%S', time.gmtime(end))}")
-
-
-            return redirect("admin:files_upload")
-        else:
-            title = "Загрузка файла"
-            context = dict(
-               # Include common variables for rendering the admin template.
-               self.admin_site.each_context(request),
-               # Anything else you want in the context...
-               title=title
-            )
-            return TemplateResponse(request, "admin/files-upload.html", context)
-
-
-from django.http import HttpResponseRedirect
 
 @admin.register(Promocode)
 class PromocodeAdmin(admin.ModelAdmin):
@@ -71,6 +35,7 @@ class PromocodeAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         my_urls = [
             path('change_external_id/', self.change_external_id),
+            path('file_upload/', self.file_upload),
         ]
         return my_urls + urls
 
@@ -79,6 +44,20 @@ class PromocodeAdmin(admin.ModelAdmin):
             old = request.POST.get("old_external_id", "")
             new = request.POST.get("new_external_id", "")
             self.model.objects.filter(tilda_external_product_id=old).update(tilda_external_product_id=new)
+            messages.add_message(request, messages.SUCCESS, 'Внешний код успешно изменен')
+        return HttpResponseRedirect("../")
+
+    def file_upload(self, request):
+        if request.method == "POST":
+            file = request.FILES['file']
+
+            start = time.time()
+            is_ok = csv_file_handling(file, request)
+            end = time.time() - start
+            if is_ok:
+                messages.add_message(request, messages.SUCCESS, 'Данные из файла успешно загружены в БД')
+                messages.add_message(request, messages.SUCCESS,
+                                     f"Время обработки: {time.strftime('%H:%M:%S', time.gmtime(end))}")
         return HttpResponseRedirect("../")
 
 
@@ -87,7 +66,44 @@ class NotificationRecipientsAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'is_active']
 
 
-admin.site.register(Settings)
 
 
+
+
+
+# @admin.register(CustomAdminPage)
+# class CustomAdminPageAdmin(admin.ModelAdmin):
+#
+#     def get_urls(self):
+#         urls = super().get_urls()
+#         my_urls = [
+#             path('files-upload/', self.admin_site.admin_view(self.files_upload), name="files_upload"),
+#         ]
+#         return my_urls + urls
+#
+#
+#     def files_upload(self, request):
+#         if request.method == "POST":
+#             file = request.FILES['file']
+#
+#             start = time.time()
+#             is_ok = csv_file_handling(file, request)
+#             print(is_ok)
+#             end = time.time() - start
+#             if is_ok:
+#                 messages.add_message(request, messages.SUCCESS, 'Данные из файла успешно загружены в БД')
+#                 messages.add_message(request, messages.SUCCESS,
+#                                      f"Время обработки: {time.strftime('%H:%M:%S', time.gmtime(end))}")
+#
+#
+#             return redirect("admin:files_upload")
+#         else:
+#             title = "Загрузка файла"
+#             context = dict(
+#                # Include common variables for rendering the admin template.
+#                self.admin_site.each_context(request),
+#                # Anything else you want in the context...
+#                title=title
+#             )
+#             return TemplateResponse(request, "admin/files-upload.html", context)
 
