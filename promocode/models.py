@@ -16,7 +16,7 @@ class Promocode(models.Model):
     park = models.CharField(max_length=255, verbose_name="Парк")
     creator = models.CharField(max_length=255, verbose_name="Создатель")
     action_name = models.CharField(max_length=255, verbose_name="Название акции")
-    tilda_external_product_id = models.CharField(max_length=255, verbose_name="Внешний код товара (Тильда)")
+    tilda_external_product_id = models.CharField(max_length=255, verbose_name="Внешний код")
     code = models.CharField(max_length=255, verbose_name="Код", unique=True)
     status = models.BooleanField(verbose_name="Статус", default=False)
     date_of_use = models.DateField(verbose_name="Дата использования", null=True, blank=True, default=None)

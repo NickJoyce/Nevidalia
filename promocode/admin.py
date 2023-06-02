@@ -55,6 +55,8 @@ class CustomAdminPageAdmin(admin.ModelAdmin):
             return TemplateResponse(request, "admin/files-upload.html", context)
 
 
+from django.http import HttpResponseRedirect
+
 @admin.register(Promocode)
 class PromocodeAdmin(admin.ModelAdmin):
     list_display = ['action_name', 'date_of_create', 'start_date', 'end_date', 'park', 'creator',
@@ -63,6 +65,22 @@ class PromocodeAdmin(admin.ModelAdmin):
     search_fields = ['date_of_create', 'start_date', 'end_date', 'park', 'creator', 'action_name', 'code', 'status',
                     'date_of_use']
 
+    change_list_template = "admin/promocode_change_list.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path('change_external_id/', self.change_external_id),
+        ]
+        return my_urls + urls
+
+    def change_external_id(self, request):
+        if request.method == "POST":
+            old = request.POST.get("old_external_id", "")
+            new = request.POST.get("new_external_id", "")
+            self.model.objects.filter(tilda_external_product_id=old).update(tilda_external_product_id=new)
+        return HttpResponseRedirect("../")
+
 
 @admin.register(NotificationRecipients)
 class NotificationRecipientsAdmin(admin.ModelAdmin):
@@ -70,3 +88,6 @@ class NotificationRecipientsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Settings)
+
+
+

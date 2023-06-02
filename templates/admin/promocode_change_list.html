@@ -1,0 +1,14 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div>
+        <form action="change_external_id/" method="POST">
+            {% csrf_token %}
+                <input type="text" name="old_external_id" required placeholder="Внешний код (old)"/>
+                <input type="text" name="new_external_id" required placeholder="Внешний код (new)"/>
+                <input type="submit" value="Заменить внешний код"/>
+        </form>
+    </div>
+    <br />
+    {{ block.super }}
+{% endblock %}
