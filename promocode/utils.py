@@ -70,14 +70,16 @@ def csv_file_handling(file, request):
     for n, row in enumerate(df.itertuples(index=False), start=1):
         try:
             Promocode.objects.create(date_of_create=get_data_from_str(row.Дата_создания),
-                                      start_date=get_data_from_str(row.Начало),
-                                      end_date=get_data_from_str(row.Окончание),
-                                      park=row.Парк,
-                                      creator=row.Создатель,
-                                      action_name=row.Название_акции,
-                                      code=row.Код,
-                                      status=change_status_to_bool(row.Статус),
-                                      tilda_external_product_id=row.Внешний_код)
+                                     start_date=get_data_from_str(row.Начало),
+                                     end_date=get_data_from_str(row.Окончание),
+                                     park=row.Парк,
+                                     creator=row.Создатель,
+                                     action_name=row.Название_акции,
+                                     code=row.Код,
+                                     status=change_status_to_bool(row.Статус),
+                                     tilda_external_product_id=row.Внешний_код,
+                                     ticket_limit=row.Лимит_билета,
+                                     ticket_day_type=row.День_недели)
         except:
             delete_last_rows(n-1)
             messages.add_message(request, messages.ERROR, 'Данные из файла не загружены в БД')

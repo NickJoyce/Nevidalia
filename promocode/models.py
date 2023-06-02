@@ -20,10 +20,8 @@ class Promocode(models.Model):
     code = models.CharField(max_length=255, verbose_name="Код", unique=True)
     status = models.BooleanField(verbose_name="Статус", default=False)
     date_of_use = models.DateField(verbose_name="Дата использования", null=True, blank=True, default=None)
-    ticket_limit = models.CharField(max_length=255, verbose_name="Лимит", null=True, blank=True,
-                             default="часовой")
-    ticket_day_type = models.CharField(max_length=255, verbose_name="Тип дня недели", null=True, blank=True,
-                                       default="будние")
+    ticket_limit = models.CharField(max_length=255, verbose_name="Лимит билета", null=True, blank=True)
+    ticket_day_type = models.CharField(max_length=255, verbose_name="День недели", null=True, blank=True)
 
     class Meta:
         verbose_name = "Промокод"

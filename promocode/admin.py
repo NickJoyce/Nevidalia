@@ -66,7 +66,7 @@ class PromocodeAdmin(admin.ModelAdmin):
 
 @admin.register(NotificationRecipients)
 class NotificationRecipientsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email']
+    list_display = ['name', 'email', 'is_active']
 
 
 admin.site.register(Settings)

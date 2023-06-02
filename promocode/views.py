@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.db.transaction import atomic, non_atomic_requests
 from project.settings.base import WEBHOOK_API_KEY
 from .utils import Order, Customer, OrderItem
-from .models import Promocode
+from .models import Promocode, Settings, NotificationRecipients
 from jinja2 import Template
 from project.settings.base import BASE_DIR
 from notifications.customer import CustomerNotification
@@ -72,11 +72,25 @@ def order_webhook_payload_handling(payload):
         with open(f"{BASE_DIR}/notifications/templates/promocodes_content.txt", encoding="utf-8") as f:
             content = Template(f.read()).render(order=order)
 
-        recipient = (order.customer.name, order.customer.email)
-        CustomerNotification().send_promocodes(recipient=recipient, subject=subject, content=content)
+
+        need_to_send = False
+        # отправка уведомлений с промокодами активирована
+        if Settings.load().is_active_promocode_notification:
+            need_to_send = True
+        else:
+            notification_recipients = NotificationRecipients.objects.all()
+            # email из заказа есть в списке получателей уведомлений
+            if order.customer.email in [recipient.email for recipient in notification_recipients]:
+                # получатель уведомлений активен
+                if [r.is_active for r in notification_recipients if r.email == order.customer.email][0]:
+                    need_to_send = True
+
+        if need_to_send:
+            recipient = (order.customer.name, order.customer.email)
+            CustomerNotification().send_promocodes(recipient=recipient, subject=subject, content=content)
     else:
         AdminNotification().send_promocodes_error(order_id=order.order_id)
-        print("Уведомление покупателю не отправлено: Доступных для отправки промокодов нет или их недостаточно для всех заказанных товаров")
+
 
 
 
