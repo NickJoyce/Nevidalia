@@ -1,4 +1,4 @@
 from .models import Settings
 
-def company(request):
+def settings(request):
     return {'settings': Settings.load()}

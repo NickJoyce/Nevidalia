@@ -81,3 +81,9 @@ class Settings(SingletonModel):
                                                                   "только если email адрес указанный при оформлении"
                                                                   " из списка раздела Получатели Уведомлений")
 
+    class Meta:
+        verbose_name = "Настройки"
+        verbose_name_plural = "Настройки"
+
+    def __str__(self):
+        return "Настройки"
