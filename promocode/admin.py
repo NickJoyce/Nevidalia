@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.shortcuts import redirect
-from .models import CustomAdminPage, Promocode, NotificationRecipients
+from .models import CustomAdminPage, Promocode, NotificationRecipients, Settings
 from django.urls import path
 from django.template.response import TemplateResponse
 from django.contrib import admin
@@ -67,3 +67,6 @@ class PromocodeAdmin(admin.ModelAdmin):
 @admin.register(NotificationRecipients)
 class NotificationRecipientsAdmin(admin.ModelAdmin):
     list_display = ['name', 'email']
+
+
+admin.site.register(Settings)

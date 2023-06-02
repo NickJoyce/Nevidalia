@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.cache import cache
 
 # Create your models here.
 class CustomAdminPage(models.Model):
@@ -45,4 +46,38 @@ class NotificationRecipients(models.Model):
         return f"{self.name}"
 
 
+
+class SingletonModel(models.Model):
+
+    class Meta:
+        abstract = True
+
+    def delete(self, *args, **kwargs):
+        pass
+
+    def set_cache(self):
+        cache.set(self.__class__.__name__, self)
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super(SingletonModel, self).save(*args, **kwargs)
+
+        self.set_cache()
+
+    @classmethod
+    def load(cls):
+        if cache.get(cls.__name__) is None:
+            obj, created = cls.objects.get_or_create(pk=1)
+            if not created:
+                obj.set_cache()
+        return cache.get(cls.__name__)
+
+
+class Settings(SingletonModel):
+    is_active_promocode_notification = models.CharField(max_length=255,
+                                                        default=False,
+                                                        verbose_name="Email уведомление покупателю после оплаты заказа",
+                                                        help_text="В выключенном состоянии уведомления отправляются "
+                                                                  "только если email адрес указанный при оформлении"
+                                                                  " из списка раздела Получатели Уведомлений")
 
