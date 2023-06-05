@@ -37,12 +37,25 @@ class NotificationRecipients(models.Model):
     is_active = models.BooleanField(default=True)
 
     class Meta:
-        verbose_name = "Получатель уведомлений"
-        verbose_name_plural = "Получатели уведомлений"
+        verbose_name = "Получатель служебных уведомлений"
+        verbose_name_plural = "Получатели служебных уведомлений"
 
     def __str__(self):
         return f"{self.name}"
 
+
+class EmailNotificationTemplate(models.Model):
+    code = models.IntegerField(verbose_name="Код уведомления")
+    name = models.CharField(max_length=100, verbose_name="Наименование уведомления")
+    subject = models.CharField(max_length=255, verbose_name="Тема")
+    content = models.TextField(max_length=2000, verbose_name="Сообщение")
+
+    class Meta:
+        verbose_name = "Шаблон email уведомления"
+        verbose_name_plural = "Шаблоны email уведомлений"
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 class SingletonModel(models.Model):
