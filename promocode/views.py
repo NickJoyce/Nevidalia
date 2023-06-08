@@ -22,7 +22,7 @@ def celery_task_inside(request):
     test_task.delay()
     return redirect('index')
 
-#webhooks
+#webhook
 @csrf_exempt
 @require_POST
 @non_atomic_requests
@@ -31,9 +31,10 @@ def order_webhook(request):
     if compare_digest(given_token, WEBHOOK_API_KEY):
         try:
             order_webhook_payload_handling(json.loads(request.body))
+            return HttpResponse(status=200, reason="OK")
         except:
-            AdminNotification().order_webhook_payload_handling_error(traceback.format_exc())
-        return HttpResponse(status=200, reason="OK")
+            AdminNotification().order_webhook_payload_handling_error(traceback.format_exc(), request.body)
+            return HttpResponse(status=500, reason="Internal server error [order_webhook_payload_handling]")
     else:
         return HttpResponse(status=403, reason="API key isn't valid")
 
@@ -68,7 +69,7 @@ def order_webhook_payload_handling(payload):
                 promocode.save()
 
         need_to_send = False
-        # отправка уведомлений с промокодами активирована
+        # если отправка уведомлений с промокодами активирована в модели Settings
         if Settings.load().is_active_promocode_notification:
             need_to_send = True
         else:

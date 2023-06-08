@@ -17,9 +17,9 @@ class AdminNotification(Notification):
                   subject=subject,
                   content=content)
 
-    def order_webhook_payload_handling_error(self, traceback):
-        subject = f"{self.APP_ERROR} Ошибка при обработке данных поступивших через через вебхук"
-        content = traceback
+    def order_webhook_payload_handling_error(self, traceback, body):
+        subject = f"{self.APP_ERROR} 500 Internal Server Error"
+        content = f"{traceback}\nrequest body:\n{body}"
         self.send(recipients=self.get_admin_recipients(),
                   subject=subject,
                   content=content)
