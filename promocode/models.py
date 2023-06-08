@@ -22,6 +22,10 @@ class Promocode(models.Model):
     date_of_use = models.DateField(verbose_name="Дата использования", null=True, blank=True, default=None)
     ticket_limit = models.CharField(max_length=255, verbose_name="Лимит билета", null=True, blank=True)
     ticket_day_type = models.CharField(max_length=255, verbose_name="День недели", null=True, blank=True)
+    customer_name = models.CharField(max_length=255, null=True, blank=True, verbose_name="Имя")
+    customer_phone = models.CharField(max_length=255, null=True, blank=True, verbose_name="Телефон")
+    customer_email = models.EmailField(null=True, blank=True, verbose_name="email")
+    sending_date = models.DateTimeField(null=True, blank=True, verbose_name="Дата отправки уведомления")
 
     class Meta:
         verbose_name = "Промокод"
@@ -29,6 +33,8 @@ class Promocode(models.Model):
 
     def __str__(self):
         return f"{self.code}"
+
+
 
 
 class NotificationRecipients(models.Model):

@@ -1,6 +1,12 @@
 {% extends 'admin/change_list.html' %}
 
+{% load promocode_tags %}
+
 {% block object-tools %}
+
+    {% distinct_parks as distinct_parks %}
+    {% distinct_external_id as distinct_external_id %}
+
     <div class="view_list_object_tool_change_external_id">
         <form action="change_external_id/" method="POST">
             {% csrf_token %}
@@ -16,6 +22,28 @@
             <input type="submit" value="Отправить">
         </form>
     </div>
+
+    <div class="view_list_object_tool_delete_by_park">
+        <form action="delete_by_park/" method="POST">
+            {% csrf_token %}
+            {% for park in distinct_parks %}
+                <p>{{ park }}</p>
+            {% endfor %}
+            <input type="submit" value="Удалить промокоды у парка">
+        </form>
+    </div>
+
+    <div class="view_list_object_tool_delete_by_tilda_external_product_id">
+        <form action="delete_by_tilda_external_product_id/" method="POST">
+            {% csrf_token %}
+            {% for external_id in distinct_external_id %}
+                <p>{{ external_id }}</p>
+            {% endfor %}
+            <input type="submit" value="Удалить промокоды у парка">
+        </form>
+    </div>
+
+
     <br />
     {{ block.super }}
 {% endblock %}

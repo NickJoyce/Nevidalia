@@ -15,6 +15,7 @@ from notifications.customer import CustomerNotification
 from notifications.admin import AdminNotification
 import traceback
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 # Create your views here.
 # celery
@@ -29,12 +30,17 @@ def celery_task_inside(request):
 def order_webhook(request):
     given_token = request.headers.get("webhook-api-key", "")
     if compare_digest(given_token, WEBHOOK_API_KEY):
-        try:
-            order_webhook_payload_handling(json.loads(request.body))
+        payload = json.loads(request.body)
+        # if tilda's test request have been received
+        if "test" in payload.keys() and "test" in payload.values():
             return HttpResponse(status=200, reason="OK")
-        except:
-            AdminNotification().order_webhook_payload_handling_error(traceback.format_exc(), request.body)
-            return HttpResponse(status=500, reason="Internal server error [order_webhook_payload_handling]")
+        else:
+            try:
+                order_webhook_payload_handling(payload)
+                return HttpResponse(status=200, reason="OK")
+            except:
+                AdminNotification().order_webhook_payload_handling_error(traceback.format_exc(), payload)
+                return HttpResponse(status=500, reason="Internal server error [order_webhook_payload_handling]")
     else:
         return HttpResponse(status=403, reason="API key isn't valid")
 
@@ -64,8 +70,11 @@ def order_webhook_payload_handling(payload):
         # Меняем статусы у промокодов и сохраняем их
         for item in order.items:
             for promocode in item.promocodes:
-                print(promocode.pk)
                 promocode.status = True
+                promocode.customer_name = order.customer.name
+                promocode.customer_phone = order.customer.phone
+                promocode.customer_email = order.customer.email
+                promocode.sending_date = timezone.now()
                 promocode.save()
 
         need_to_send = False
@@ -92,6 +101,7 @@ def order_webhook_payload_handling(payload):
 
             recipient = (order.customer.name, order.customer.email)
             CustomerNotification().send_promocodes(recipient=recipient, subject=subject, content=content)
+            AdminNotification().send_promocodes_copy(subject=subject, content=content)
     else:
         AdminNotification().send_promocodes_error(order_id=order.order_id)
 

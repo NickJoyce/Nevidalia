@@ -28,9 +28,6 @@ class OrderItem():
             return ", ".join([promocode.code for promocode in self.promocodes])
 
 
-
-
-
 class Order():
     def __init__(self, customer: Customer, park: str, order_id: str, items: [OrderItem], amount:int):
         self.customer = customer
