@@ -27,7 +27,7 @@ class PromocodeAdmin(admin.ModelAdmin):
                     'tilda_external_product_id', 'code', 'status', 'date_of_use', 'ticket_limit', 'ticket_day_type']
     list_filter = ['park', 'creator', 'action_name', 'tilda_external_product_id', 'status']
     search_fields = ['date_of_create', 'start_date', 'end_date', 'park', 'creator', 'action_name', 'code', 'status',
-                    'date_of_use']
+                    'date_of_use', 'tilda_external_product_id']
 
     change_list_template = "admin/promocode_change_list.html"
 
