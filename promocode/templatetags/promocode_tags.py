@@ -10,3 +10,5 @@ def get_distinct_parks():
 @register.simple_tag(name="distinct_external_id")
 def get_distinct_external_id():
     return [promocode.tilda_external_product_id  for promocode in Promocode.objects.distinct('tilda_external_product_id')]
+
+

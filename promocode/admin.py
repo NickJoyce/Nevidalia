@@ -37,12 +37,25 @@ class PromocodeAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
+            path('delete_by_park/', self.delete_by_park),
+            path('delete_by_external_id/', self.delete_by_external_id),
             path('change_external_id/', self.change_external_id),
             path('file_upload/', self.file_upload),
-            path('delete_by_park/', self.delete_by_park),
-            path('delete_by_tilda_external_product_id/', self.delete_by_tilda_external_product_id)
         ]
         return my_urls + urls
+
+    def delete_by_park(self, request):
+        park = request.POST.get("park", "")
+        self.model.objects.filter(park=park).delete()
+        messages.add_message(request, messages.SUCCESS, f"Записи которые содержат {park} успешно удалены!")
+        return HttpResponseRedirect("../")
+
+
+    def delete_by_external_id(self, request):
+        external_id = request.POST.get("external_id", "")
+        self.model.objects.filter(tilda_external_product_id=external_id).delete()
+        messages.add_message(request, messages.SUCCESS, f"Записи которые содержат {external_id} успешно удалены!")
+        return HttpResponseRedirect("../")
 
     def change_external_id(self, request):
         if request.method == "POST":
@@ -66,14 +79,6 @@ class PromocodeAdmin(admin.ModelAdmin):
         return HttpResponseRedirect("../")
 
 
-    def delete_by_park(self, request, extra_context=None):
-        messages.add_message(request, messages.ERROR, 'Error')
-        return HttpResponseRedirect("../")
-
-
-    def delete_by_tilda_external_product_id(self, request):
-        messages.add_message(request, messages.ERROR, 'Error')
-        return HttpResponseRedirect("../")
 
 
 @admin.register(NotificationRecipients)

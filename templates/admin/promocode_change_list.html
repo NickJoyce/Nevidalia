@@ -7,41 +7,55 @@
     {% distinct_parks as distinct_parks %}
     {% distinct_external_id as distinct_external_id %}
 
-    <div class="view_list_object_tool_change_external_id">
+    <div class="promocode_view_list_object_tool delete_by_park">
+        <form action="delete_by_park/" method="POST">
+            {% csrf_token %}
+            <select name="park" required>
+                <option value selected disabled>---</option>
+                {% for park in distinct_parks %}
+                    <option value="{{ park }}">{{ park }}</option>
+                {% endfor %}
+               </select>
+            <input type="submit" value="Удалить по парку">
+        </form>
+    </div>
+
+    <div class="promocode_view_list_object_tool delete_by_external_id">
+        <form action="delete_by_external_id/" method="POST">
+            {% csrf_token %}
+            <select name="external_id" required>
+                <option value selected disabled>---</option>
+                {% for external_id in distinct_external_id %}
+                    <option value="{{ external_id }}">{{ external_id }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Удалить по внешнему коду">
+        </form>
+    </div>
+
+    <div class="promocode_view_list_object_tool change_external_id">
         <form action="change_external_id/" method="POST">
             {% csrf_token %}
-                <input type="text" name="old_external_id" required placeholder="Внешний код (old)"/>
-                <input type="text" name="new_external_id" required placeholder="Внешний код (new)"/>
+                <select name="old_external_id" required>
+                    <option value selected disabled>---</option>
+                    {% for external_id in distinct_external_id %}
+                        <option value="{{ external_id }}">{{ external_id }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="new_external_id" required placeholder="Внешний код (new)" style="width:20rem"/>
                 <input type="submit" value="Заменить внешний код"/>
         </form>
     </div><hr>
-    <div class="view_list_object_tool_file_upload">
+
+    <div class="promocode_view_list_object_tool file_upload">
         <form method="POST" action="file_upload/" enctype="multipart/form-data" >
             {% csrf_token %}
             <input type="file" name="file" required accept=".csv">
-            <input type="submit" value="Отправить">
+            <input type="submit" value="Импорт">
         </form>
     </div>
 
-    <div class="view_list_object_tool_delete_by_park">
-        <form action="delete_by_park/" method="POST">
-            {% csrf_token %}
-            {% for park in distinct_parks %}
-                <p>{{ park }}</p>
-            {% endfor %}
-            <input type="submit" value="Удалить промокоды у парка">
-        </form>
-    </div>
 
-    <div class="view_list_object_tool_delete_by_tilda_external_product_id">
-        <form action="delete_by_tilda_external_product_id/" method="POST">
-            {% csrf_token %}
-            {% for external_id in distinct_external_id %}
-                <p>{{ external_id }}</p>
-            {% endfor %}
-            <input type="submit" value="Удалить промокоды у парка">
-        </form>
-    </div>
 
 
     <br />
