@@ -3,10 +3,18 @@
 .messages div.success { background-color: #92D050; padding: 15px;}
 
 
-.view_list_object_tool_change_external_id {
+.promocode_view_list_object_tool {
+}
+
+.promocode_view_list_object_tool select {
+width:20rem;
+}
+
+.change_external_id, .delete_by_park, .delete_by_external_id {
 padding-bottom: 10px;
 }
 
-.view_list_object_tool_file_upload {
+.file_upload {
 padding-top: 10px;
 }
+
